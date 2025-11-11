@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smyths Recovery Gallery</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =======================
+       GENERAL STYLES
+       ======================= */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #111;
+      color: #fff;
+      scroll-behavior: smooth;
+    }
+
+    a { text-decoration: none; color: #1a73e8; transition: 0.3s; }
+    a:hover { color: #ff6600; }
+
+    img { max-width: 100%; display: block; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* =======================
+       NAVBAR
+       ======================= */
+    .navbar {
+      background-color: rgba(0,0,0,0.85);
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      gap: 20px;
+    }
+
+    .navbar li { position: relative; }
+
+    .navbar a {
+      color: #fff;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+
+    .navbar a:hover {
+      background-color: rgba(255,102,0,0.8);
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 35px;
+      left: 0;
+      background-color: rgba(0,0,0,0.9);
+      padding: 10px;
+      border-radius: 6px;
+      min-width: 150px;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: flex;
+    }
+
+    .dropdown-content a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      font-weight: normal;
+      padding: 5px 10px;
+    }
+
+    /* =======================
+       GALLERY SECTION
+       ======================= */
+    section.gallery {
+      padding: 80px 0;
+      text-align: center;
+      background: rgba(0,0,0,0.75);
+      margin: 60px auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      max-width: 1000px;
+    }
+
+    section.gallery h1 {
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 0 20px;
+    }
+
+    .grid-item {
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    .grid-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      border-radius: 10px;
+    }
+
+    .grid-item img:hover {
+      transform: scale(1.05);
+    }
+
+    /* =======================
+       LIGHTBOX
+       ======================= */
+    #lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+    }
+
+    #lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 8px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+    }
+
+    #close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 2.5rem;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #lightbox button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,102,0,0.8);
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #lightbox button:hover {
+      background: #e65c00;
+    }
+
+    #prev { left: 20px; }
+    #next { right: 20px; }
+
+    /* =======================
+       WHATSAPP FLOATING BUTTON
+       ======================= */
+    .whatsapp-float {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: #fff;
+      border-radius: 50%;
+      text-align: center;
+      font-size: 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .whatsapp-float:hover {
+      background-color: #20ba5a;
+      transform: scale(1.1);
+    }
+
+    /* =======================
+       FOOTER
+       ======================= */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      margin-top: 60px;
+    }
+
+    /* =======================
+       RESPONSIVE
+       ======================= */
+    @media (max-width: 768px) {
+      section.gallery h1 {
+        font-size: 2rem;
+      }
+
+      .grid-item img {
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <nav class="container">
+      <img src="./images/Smyths_Recovery_Logo.jpg" width="50" height="50" alt="Logo">
+      <ul>
+        <li><a href="Main.html">Home</a></li>
+        <li><a href="Gallery3.html">Gallery</a></li>
+        <li class="dropdown">
+          <a href="#">Social Media</a>
+          <div class="dropdown-content">
+            <a href="https://www.instagram.com/smythrecoveryservice/">
+              <img src="./images/instagram_logo.jpg" width="20" height="15" alt="Instagram">Instagram
+            </a>
+            <a href="https://www.tiktok.com/@smythsrecoveryservice">
+              <img src="./images/tiktok_logo.png" width="20" height="15" alt="Tiktok">Tiktok
+            </a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- GALLERY SECTION -->
+  <section class="gallery">
+    <div class="container">
+      <h1>Gallery</h1>
+      <div class="grid">
+        <div class="grid-item"><img src="./images/1.jpg" alt="Image 1"></div>
+        <div class="grid-item"><img src="./images/2.jpg" alt="Image 2"></div>
+        <div class="grid-item"><img src="./images/3.jpg" alt="Image 3"></div>
+        <div class="grid-item"><img src="./images/4.jpg" alt="Image 4"></div>
+        <div class="grid-item"><img src="./images/5.jpg" alt="Image 5"></div>
+        <div class="grid-item"><img src="./images/6.jpg" alt="Image 6"></div>
+        <div class="grid-item"><img src="./images/7.jpg" alt="Image 7"></div>
+        <div class="grid-item"><img src="./images/8.jpg" alt="Image 8"></div>
+        <div class="grid-item"><img src="./images/9.jpg" alt="Image 9"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <span id="close">&times;</span>
+    <img id="lightbox-img" src="" alt="">
+    <button id="prev">&#10094;</button>
+    <button id="next">&#10095;</button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Email: info@smythrecovery.com • 24/7 Breakdown and Recovery: 087-2620199</p>
+    <p>&copy; 2025 Smyths Recovery Service. All rights reserved.</p>
+  </footer>
+
+  <!-- WHATSAPP ICON -->
+  <a href="https://wa.me/YOURNUMBERHERE" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="35" height="35">
+  </a>
+
+  <!-- LIGHTBOX JS -->
+  <script>
+    const images = document.querySelectorAll('.grid-item img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.getElementById('close');
+    const nextBtn = document.getElementById('next');
+    const prevBtn = document.getElementById('prev');
+
+    let currentIndex = 0;
+    const imageList = Array.from(images);
+
+    function showImage(index) {
+      currentIndex = (index + imageList.length) % imageList.length;
+      lightboxImg.src = imageList[currentIndex].src;
+      lightboxImg.alt = imageList[currentIndex].alt;
+      lightbox.style.display = 'flex';
+    }
+
+    images.forEach((img, index) => img.addEventListener('click', () => showImage(index)));
+    closeBtn.addEventListener('click', () => lightbox.style.display = 'none');
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.style.display = 'none'; });
+    nextBtn.addEventListener('click', () => showImage(currentIndex + 1));
+    prevBtn.addEventListener('click', () => showImage(currentIndex - 1));
+
+    document.addEventListener('keydown', e => {
+      if (lightbox.style.display === 'flex') {
+        if (e.key === 'ArrowRight') showImage(currentIndex + 1);
+        if (e.key === 'ArrowLeft') showImage(currentIndex - 1);
+        if (e.key === 'Escape') lightbox.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>
